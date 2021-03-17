@@ -1,0 +1,39 @@
++ //Win 10 은 78 > 8c 로 바꿔주시면 됩니다. 
+
+[ENABLE]
+alloc(WallHack,2048)
+label(returnhere)
+label(originalcode)
+Alloc(Hook,1024)
+
+WallHack:
+cmp [esp+78],005C58B5
+//83 c4 ? 84 c0 74 ? 8b 0d ? ? ? ? 6a
+jne originalcode
+db 90 90 90
+mov [esp+78],Hook
+originalcode:
+mov edi,edi
+push ebp
+mov ebp,esp
+jmp returnhere
+
+Hook:
+add esp,08
+db 90 90
+mov ecx,[006FF1B8]
+push 00//01 02 00
+push 0E//08 08 0E 
+//push 에 맞춰서 쓰고 싶은거 쓰시면 됩니다.
+jmp 005C58C6 //push 08 call 
+
+ntdll.RtlEnterCriticalSection:
+jmp WallHack
+returnhere:
+
+[DISABLE]
+dealloc(WallHack)
+ntdll.RtlEnterCriticalSection:
+mov edi,edi
+push ebp
+mov ebp,esp
