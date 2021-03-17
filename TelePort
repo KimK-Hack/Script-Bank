@@ -1,0 +1,46 @@
+# 원 7으로 작업했기 때문에 윈 10 이랑 Hook 어드레스 다릅니다.
+# 윈 10 은 KERNEL32.GetCurrentThreadId 여기에 Code injection 사용하시면 됩니다.
+# API 감지될 이상 몇 년이 지나도 사용 가능합니다.
+[ENABLE]
+Alloc(Check_ESP,2028)
+Alloc(TelePort,1024)
+label(Exit)
+label(FakeTele)
+
+Check_ESP:
+cmp [esp],004741FF
+//8b 56 ? 33 d6
+Jne Exit
+mov [esp],TelePort
+Exit:
+jmp KERNELBASE.GetCurrentThreadId
+
+TelePort:
+mov edx,[esi+18]
+xor edx,esi
+mov eax,[esi+14]
+mov ecx,esi
+mov [ebp-10],eax
+call 00432460
+mov [ebp-04],eax
+mov [ebp-0C],00000000
+mov eax,[ebp-10]
+jmp FakeTele
+FakeTele:
+mov edx,[esi+10]
+mov esi,[ebp+08]
+xor edx,[ebp-04]
+mov [ebp-08],edx
+mov [esi],(float)399.4825 //X
+mov [esi+4],(float)-614.9 //Y 
+mov [esi+8],(float)1169.518 //Z 
+mov eax,[esi]
+xor eax,[ebp-04]
+jmp 00474263
+
+kernel32.dll+1085C:
+dd Check_ESP
+
+[DISABLE]
+kernel32.dll+1085C:
+dd KERNELBASE.GetCurrentThreadId
