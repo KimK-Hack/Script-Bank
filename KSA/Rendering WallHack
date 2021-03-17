@@ -1,11 +1,11 @@
-[ENABLE]
+[ENABLE] 
 Alloc(Check_ESP,2048)
 Alloc(Hook,1024)
 Label(Exit)
 
 Check_ESP:
 cmp [esp+20],005AABA8
-//ff 75 ? 8b 0d ? ? ? ? 6a ? e8 ? ? ? ? 32 c9
+//ff 75 ? 8b 0d ? ? ? ? 6a ? e8 ? ? ? ? 32 c9 
 Jne Exit
 mov [esp+20],Hook
 
