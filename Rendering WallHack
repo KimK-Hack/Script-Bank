@@ -1,0 +1,62 @@
+[ENABLE]
+Alloc(Check_ESP,2048)
+Alloc(Hook,1024)
+Label(Exit)
+
+Check_ESP:
+cmp [esp+20],005AABA8
+//ff 75 ? 8b 0d ? ? ? ? 6a ? e8 ? ? ? ? 32 c9
+Jne Exit
+mov [esp+20],Hook
+
+Exit:
+jmp ////////
+
+Hook:
+mov ecx,[006FF1B8]
+push 01
+push 07
+call 00556640
+xor cl,cl
+xor al,al
+mov [ebp-0000025C],ecx
+xor edi,edi
+mov [ebp-00000260],eax
+db 90 90 90 90 90 90
+mov eax,[ebx+00001434]
+mov esi,edi
+shl esi,04
+sub esi,edi
+shl esi,03
+mov ecx,[ebp+esi-00000254]
+push [eax+ecx*4]
+mov ecx,[006FF1B8]
+push 01
+push edi
+call 00556790
+mov eax,[ebp-0000025C]
+mov ecx,00000001
+cmp dword ptr [ebp+esi-00000254],00
+movzx eax,al
+cmove eax,ecx
+mov ecx,[ebp+esi-00000248]
+mov [ebp-0000025C],eax
+mov eax,[ebx+00001434]
+push [eax+ecx*4+40]
+mov ecx,[006FF1B8]
+push 04
+push edi
+call 00556790
+mov eax,[ebp-00000260]
+mov ecx,00000001
+cmp dword ptr [ebp+esi-00000248],00
+movzx eax,al
+cmove eax,ecx
+mov ecx,[ebp-0000025C]
+mov [ebp-00000260],eax
+jmp 005AAC5B
+
+????????:
+dd Check_ESP
+
+call dword ptr ecx + E4 인가 E8 기억 안남   
