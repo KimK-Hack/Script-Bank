@@ -1,6 +1,6 @@
 # 원 7으로 작업했기 때문에 윈 10 이랑 Hook 어드레스 다릅니다.
 # 윈 10 은 KERNEL32.GetCurrentThreadId 여기에 Code injection 사용하시면 됩니다.
-# API 감지될 이상 몇 년이 지나도 사용 가능합니다.
+# API 감지될 이상 몇 년이 지나도 사용 가능합니다. 
 [ENABLE]
 Alloc(Check_ESP,2028)
 Alloc(TelePort,1024)
