@@ -1,0 +1,32 @@
+[ENABLE]
+alloc(Reload,2048)
+Alloc(Hook,1024)
+label(returnhere)
+label(OriginalCode)
+
+Reload:
+cmp [esp+58],cshell.dll+7AC33B
+//e9xxxxxxxx8dxxxxe8xxxxxxxx8bxxxx6axx68xxxxxxxxc6
+Jne OriginalCode
+mov [esp+58],cshell.dll+7AC409
+//8bxxxx33xxe8xxxxxxxx85xx74xx8bxx8bxxffxxxxxxxxxx8bxx8bxx8b
+OriginalCode:
+mov edi,edi
+push ebp
+mov ebp,esp
+jmp returnhere
+
+ntdll.RtlEnterCriticalSection:
+jmp Reload
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+ntdll.RtlEnterCriticalSection:
+mov edi,edi
+push ebp
+mov ebp,esp
+
+//Win7 로 작업 했습니다.
