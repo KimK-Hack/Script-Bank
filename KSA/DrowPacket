@@ -1,0 +1,61 @@
+//이런식으로 되어있다.
+pushad
+mov ecx,[cshell.dll+FB10C8]
+mov edx,[ecx]
+mov edx,[edx+24]
+lea eax,[할당A]
+push eax
+call edx
+push 08
+push 00000082
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+push 20
+push 00001388
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+push 10
+push 40
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+push 10
+push 40
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+push 10
+push 000000C8
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+push 10
+push 000000C8
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+push 01
+push 00
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+push 08
+push 00
+mov ecx,[할당A]
+mov eax,[ecx]
+call dword ptr [eax+24]
+lea ecx,[할당B]
+push ecx
+lea ecx,[할당A]
+call cshell.dll+4AE40
+mov eax,[eax]
+mov ecx,[cshell.dll+F10830]
+mov edx,[ecx]
+push 01
+push eax
+mov eax,[edx+000001D4] //1DC 변경요망
+call eax
+popad
+ret
