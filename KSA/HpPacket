@@ -1,0 +1,22 @@
+[ENABLE]
+Alloc(HPPet,2048)
+GlobalAlloc(HP,2048)
+
+HPPet:
+pushad
+push [HP]
+call cshell.dll+B90540
+popad
+ret
+
+
+HP:
+dd FF
+
+[DISABLE]
+
+아무대나 하이재킹 하셔서 쓰레드 도는곳에 꽂아도 잘되고 
+저 상태로 HPPet 쓰레드 돌려도 잘 되구 (생존모드)
+
+
+// 0F 2F 40 ?? 72 ?? FF 70 ?? 8B CF E8 ?? ?? ?? ?? 8B 47 ?? 
