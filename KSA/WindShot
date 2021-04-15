@@ -1,0 +1,35 @@
+윈10 으로 작업 했기때문에 윈7 이랑 Hook 어드레스 다릅니다.
+
+[ENABLE]
+Alloc(Check_ESP,2048)
+Alloc(Hook,1024)
+label(Exit)
+GlobalAlloc(Shot,4)
+
+Check_ESP:
+cmp [esp+54],cshell.dll+91F674
+//8b 0d ? ? ? ? 81 c1 ? ? ? ? 8b f1
+jne Exit
+mov [esp+54],Hook
+Exit:
+jmp KERNELBASE.GetLastError
+
+Hook:
+pushad
+mov eax,[edi+00000A64]
+lea ecx,[edi+00000A64]
+mov eax,[eax]
+call eax
+mov [Shot+100],eax
+popad
+jmp cshell.dll+91F674
+
+
+ucrtbase.dll+112050:
+dd Check_ESP
+
+[DISABLE]
+ucrtbase.dll+112050:
+dd KERNELBASE.GetLastError
+
+Shot+100 Offset 0 > Frozen or [edi+00000A68] copy Value
