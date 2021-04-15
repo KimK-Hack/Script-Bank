@@ -1,0 +1,34 @@
+[ENABLE]
+Alloc(AimFix_Check,2048)
+label(Exit)
+Alloc(Hook,1024)
+
+AimFix_Check:
+cmp [esp+3C],cshell.dll+760306
+//8b 07 8b cf c7 45 fc ? ? ? ? 8b 40 ? ff d0 8b 87
+jne Exit
+db 90 90 
+mov [esp+3C],Hook
+Exit:
+jmp ntdll.RtlAllocateHeap
+
+Hook:
+mov eax,[edi]
+mov ecx,edi
+mov [ebp-04],00000000
+mov eax,[eax+44]
+call eax
+mov eax,[edi+00000320]
+lea esi,[edi+00000320]
+mov ecx,esi
+mov [ebp-80],(Float)0.0
+mov eax,[eax]
+jmp cshell.dll+760329
+
+ucrtbase.DLL+1090F4: //동일
+dd AimFix_Check
+
+
+[DISABLE]
+ucrtbase.DLL+1090F4:
+dd ntdll.RtlAllocateHeap
