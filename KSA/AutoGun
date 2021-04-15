@@ -1,0 +1,60 @@
+[ENABLE] //Win 7 작업 입니다.
+Alloc(AutoGun,2048)
+label(Exit)
+Alloc(Hook,1024)
+
+AutoGun:
+cmp [esp+128],cshell.dll+75687D
+//53 8d 9e ? ? ? ? 8b fb
+Jne Exit
+db 90
+mov [esp+128],Hook
+Exit:
+jmp kernel32.SetLastError
+
+Hook:
+push ebx
+lea ebx,[esi+000000A0]
+mov edi,ebx
+lea ecx,[ebx+18]
+and edi,-04
+mov eax,ebx
+shl edi,1A
+and eax,00F0F0F0
+or edi,eax
+or edi,[ebx+0C]
+xor edi,[ebx+08]
+push edi
+push ebx
+call cshell.dll+17680
+test al,al
+movzx eax,byte ptr [esi+00000230]
+lea ebx,[esi+0000022C]
+movzx ecx,byte ptr [ebx+06]
+imul ecx,eax
+movzx eax,word ptr [ebx+06]
+add ecx,eax
+movzx eax,word ptr [ebx+04]
+add ecx,eax
+mov eax,[ebx]
+push ecx
+mov ecx,ebx
+mov eax,[eax]
+call eax
+test al,al
+movzx ecx,word ptr [ebx+06]
+mov eax,[ebx+08]
+shr ecx,1
+shl eax,0F
+or ecx,eax
+xor ecx,[ebx+0C]
+mov [esi+D0],FFFFFFFF //물총 
+jmp cshell.dll+7568F4
+
+
+ucrtbase.DLL+109048:
+dd AutoGun
+
+[DISABLE]
+ucrtbase.DLL+109048:
+dd kernel32.SetLastError
