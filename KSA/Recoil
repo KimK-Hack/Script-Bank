@@ -1,0 +1,36 @@
+윈7 으로 작업 했기때문에 윈10 이랑 Hook 어드레스 다릅니다.
+
+무기 덤프로 하실꺼면 30 지우고 하시면 됩니다.
+
+[ENABLE]
+Alloc(Check_Recoil,2048)
+Alloc(Hook,1024)
+label(Exit)
+
+Check_Recoil:
+cmp [esp+30],cshell.dll+790DF6
+//F3 0F 10 45 E8 0F 57 C9 32 C0 DD D8 0F 2F C1
+jne Exit
+db 90 90 90 90 90
+mov [esp+30],Hook
+Exit:
+jmp kernel32.SetLastError
+
+Hook:
+mov [ebp-18],(float)0.0
+jmp cshell.dll+790DF6
+
+{
+mov [ebp-18],(float)0.0 //이렇게 쓰시면 블랭크 무반동
+xorps xmm1,xmm1
+xor al,al
+fstp st(0)
+comiss xmm0,xmm1
+jmp cshell.dll+790E05
+}
+
+
+ucrtbase.DLL+109048: //여기 모듈은 거의 패치 안한다고 보시면 됨
+dd Check_Recoil
+
+ 
